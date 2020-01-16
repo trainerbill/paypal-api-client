@@ -108,11 +108,13 @@ export async function loadPayPalCheckoutScript(querystring = 'client-id=', attri
     const script = document.createElement('script');
     script.setAttribute('src', PAYPAL_SCRIPT);
 
-    attributes.forEach((v, k) => script.setAttribute(k, v));
+    if (attributes) {
+        attributes.forEach((v, k) => script.setAttribute(k, v));
+    }
 
     container.appendChild(script);
     return new Promise((resolve, reject) => {
-        script.onload = () => resolve();
-        script.onerror = () => reject();
+        script.onload = () => { resolve() };
+        script.onerror = () => { reject() };
     });
 }
