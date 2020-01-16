@@ -101,3 +101,15 @@ export async function createOrder(data?: any) {
 
     return await res.json();
 }
+
+export async function loadPayPalCheckoutScript(querystring = 'client-id=') {
+    const PAYPAL_SCRIPT = 'https://www.paypal.com/sdk/js?' + querystring;
+    const container = document.body || document.head;
+    const script = document.createElement('script');
+    script.setAttribute('src', PAYPAL_SCRIPT);
+    container.appendChild(script);
+    return new Promise((resolve, reject) => {
+        script.onload = () => resolve();
+        script.onerror = () => reject();
+    });
+}
