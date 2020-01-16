@@ -71,7 +71,7 @@ export async function createClientToken() {
 }
 
 export async function createOrder(data?: any) {
-    const token = await createAccessToken();
+    const token = await getAccessToken();
     const payload = data || {
         "intent": "AUTHORIZE",
         "purchase_units": [
@@ -96,6 +96,27 @@ export async function createOrder(data?: any) {
 
     const res = await fetch(
         `${PAYPAL_HOSTNAME}/v2/checkout/orders`,
+        options,
+    );
+
+    return await res.json();
+}
+
+export async function captureOrder(id: string, data?: any) {
+    const token = await getAccessToken();
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token.access_token}`
+        },
+        body: JSON.stringify(data),
+    };
+
+    const res = await fetch(
+        `${PAYPAL_HOSTNAME}/v2/checkout/orders/${id}/capture`,
         options,
     );
 
